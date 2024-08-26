@@ -1,0 +1,6 @@
+2024-08-25 18:22:12 [    INFO] Step: Open main page (testing_steps.py:14)
+2024-08-25 18:22:12 [    INFO] Step: Get header on welcome page (testing_steps.py:14)
+2024-08-25 18:22:12 [    INFO] Step: Click 'Register' (testing_steps.py:14)
+2024-08-25 18:22:12 [    INFO] Step: Get header on registration page (testing_steps.py:14)
+2024-08-25 18:22:12 [    INFO] Step: Fill Username and Password (testing_steps.py:14)
+2024-08-25 18:22:12 [    INFO] Step: Click 'Sign Up' (testing_steps.py:14)
