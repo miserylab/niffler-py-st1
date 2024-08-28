@@ -2,7 +2,6 @@ from playwright.sync_api import Locator
 
 
 class BaseComponent:
-
     def __init__(self, element: Locator):
         self._element = element
 

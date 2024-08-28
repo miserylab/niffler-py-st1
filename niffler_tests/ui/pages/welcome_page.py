@@ -1,4 +1,3 @@
-from allure_commons._allure import step
 from playwright.sync_api import Page, expect
 
 from niffler_tests.ui.pages.base_page import BasePage
@@ -20,18 +19,20 @@ class WelcomePage(BasePage):
         return self._HEADER
 
     @Step("Open main page")
-    def open(self, url: str) -> None:
+    def open(self, url: str):
         self.page.goto(url)
-        expect(self.get_header()).to_have_text("Welcome to magic journey with Niffler. The coin keeper")
-
+        return self
 
     @Step("Click 'Login'")
     def click_login(self):
-        expect(self._LOGIN_BUTTON).to_be_visible()
         self._LOGIN_BUTTON.click()
-        expect(self.get_header()).to_have_text("Welcome to Niffler. The coin keeper")
 
     @Step("Click 'Register'")
     def click_register(self):
-        expect(self._REGISTER_BUTTON).to_be_visible()
         self._REGISTER_BUTTON.click()
+
+    @Step("Check that page is loaded")
+    def wait_for_page_loaded(self):
+        expect(self._LOGIN_BUTTON).to_be_visible()
+        expect(self._REGISTER_BUTTON).to_be_visible()
+        return self

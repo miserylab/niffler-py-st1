@@ -1,4 +1,4 @@
-from playwright.sync_api import Page, expect, Locator
+from playwright.sync_api import Page, expect
 
 from niffler_tests.ui.pages.component.base_component import BaseComponent
 from niffler_tests.utils.testing_steps import Step
