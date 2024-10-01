@@ -71,7 +71,7 @@ def spends_client(gateway_url, auth) -> CategoryHttpClient:
 
 
 @pytest.fixture(params=[])
-def category(request, spends_client):
+def category(request, spends_client) -> str:
     category_name = request.param
     current_categories = spends_client.get_categories()
     category_names = [category["category"] for category in current_categories]

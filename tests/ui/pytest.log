@@ -1,8 +1,0 @@
-2024-08-28 21:36:10 [ WARNING] Python-dotenv could not parse statement starting at line 7 (main.py:27)
-2024-08-28 21:36:10 [ WARNING] Python-dotenv could not parse statement starting at line 8 (main.py:27)
-2024-08-28 21:36:10 [ WARNING] Python-dotenv could not parse statement starting at line 11 (main.py:27)
-2024-08-28 21:36:10 [ WARNING] Python-dotenv could not parse statement starting at line 12 (main.py:27)
-2024-08-28 21:36:13 [    INFO] Step: Check that page is loaded (testing_steps.py:14)
-2024-08-28 21:36:13 [    INFO] Step: Get header on main page (testing_steps.py:14)
-2024-08-28 21:36:13 [    INFO] Step: Get footer on main page (testing_steps.py:14)
-2024-08-28 21:36:13 [    INFO] Step: Get header in spending table (testing_steps.py:14)
