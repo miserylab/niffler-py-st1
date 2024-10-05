@@ -31,6 +31,7 @@ class SpendingTable(BaseComponent):
     @Step("Select entry checkbox by id={spend_id}")
     def select_entry_checkbox(self, spend_id):
         entry = self.get_element().locator(f"//tbody//input[@type='checkbox'][@value='{spend_id}']")
+        entry.scroll_into_view_if_needed()
         expect(entry).to_be_visible()
         entry.click()
 
