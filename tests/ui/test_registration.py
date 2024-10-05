@@ -1,5 +1,6 @@
 import allure
-import pytest
+
+from marks import User
 
 
 @allure.epic("Frontend")
@@ -7,7 +8,7 @@ import pytest
 @allure.story("Регистрация")
 @allure.tag("UI")
 class TestRegistrationPage:
-    @pytest.mark.usefixtures("logout")
+    @User.logout
     @allure.title("WEB: Пользователь может успешно зарегистрироваться в системе")
     def test_registration_success(self, app_url, app, test_data):
         data = test_data["valid_user_data"]

@@ -4,16 +4,13 @@ from niffler_tests.ui.pages.component.base_component import BaseComponent
 from niffler_tests.utils.testing_steps import Step
 
 
-class PeopleTable(BaseComponent):
-    """Page component for people table."""
+class FriendsTable(BaseComponent):
+    """Page component for friends table."""
 
     def __init__(self, page: Page):
         _locator = page.locator("//section[contains(@class,'main-content__section')]")
         super().__init__(_locator)
         self.page = page
-        self._ADD_FRIEND_BUTTON = self.get_element().locator("//div[@data-tooltip-id='add-friend']")
-        self._SUBMIT_INVITATION_BUTTON = self.get_element().locator("//div[@data-tooltip-id='submit-invitation']")
-        self._DECLINE_INVITATION_BUTTON = self.get_element().locator("//div[@data-tooltip-id='decline-invitation']")
 
     @Step("Get index of {username} in Username column")
     def get_username_index(self, username: str):
@@ -21,22 +18,6 @@ class PeopleTable(BaseComponent):
         usernames = self.get_element().locator("//tbody/tr/td[2]").all_text_contents()
         index = usernames.index(f"{username}") + 1
         return index
-
-    @Step("Add friend {username} on people table")
-    def add_friend(self, username: str):
-        index = self.get_username_index(username)
-        add_button = (
-            self.get_element().locator(f"//tbody/tr[{index}]/td[4]").locator("//div[@data-tooltip-id='add-friend']")
-        )
-        add_button.click()
-        return self
-
-    @Step("Check add button state on people table")
-    def check_add_button(self, username: str, text: str):
-        index = self.get_username_index(username)
-        action = self.get_element().locator(f"//tbody/tr[{index}]/td[4]")
-        expect(action).to_have_text(text)
-        return self
 
     @Step("Submit and decline buttons should be visible in Actions after invite")
     def submit_and_decline_buttons_should_be_visible_after_invite(self, username: str):
@@ -48,7 +29,7 @@ class PeopleTable(BaseComponent):
         expect(decline_button).to_be_visible()
         return self
 
-    @Step("Submit invite of {username} in people table")
+    @Step("Submit invite of {username} in friend table")
     def submit_invite(self, username: str):
         index = self.get_username_index(username)
         submit_button = (
@@ -59,7 +40,7 @@ class PeopleTable(BaseComponent):
         submit_button.click()
         return self
 
-    @Step("Decline invite of {username} in people table")
+    @Step("Decline invite of {username} in friend table")
     def decline_invite(self, username: str):
         index = self.get_username_index(username)
         decline_button = (
@@ -70,24 +51,7 @@ class PeopleTable(BaseComponent):
         decline_button.click()
         return self
 
-    @Step("Check actions after friend submitted in people table")
-    def check_actions_after_friend_submitted(self, username: str, text: str):
-        index = self.get_username_index(username)
-        action = self.get_element().locator(f"//tbody/tr[{index}]/td[4]")
-        remove_button = action.locator("//div[@data-tooltip-id='remove-friend']")
-        expect(action).to_have_text(text)
-        expect(remove_button).to_be_visible()
-        return self
-
-    @Step("Check actions after friend request declined in people table")
-    def check_actions_after_friend_declined(self, username: str):
-        index = self.get_username_index(username)
-        action = self.get_element().locator(f"//tbody/tr[{index}]/td[4]")
-        add_button = action.locator("//div[@data-tooltip-id='add-friend']")
-        expect(add_button).to_be_visible()
-        return self
-
-    @Step("Remove friend with username={username} in people table")
+    @Step("Remove friend with username={username} in friend table")
     def remove_friend(self, username: str):
         index = self.get_username_index(username)
         decline_button = (
@@ -96,10 +60,17 @@ class PeopleTable(BaseComponent):
         decline_button.click()
         return self
 
-    @Step("Check actions after friend removed in people table")
-    def check_actions_after_friend_removed(self, username: str):
+    @Step("Check actions after friend submitted in friend table")
+    def check_actions_after_friend_submitted(self, username: str, text: str):
         index = self.get_username_index(username)
         action = self.get_element().locator(f"//tbody/tr[{index}]/td[4]")
-        add_button = action.locator("//div[@data-tooltip-id='add-friend']")
-        expect(add_button).to_be_visible()
+        remove_button = action.locator("//div[@data-tooltip-id='remove-friend']")
+        expect(action).to_have_text(text)
+        expect(remove_button).to_be_visible()
+        return self
+
+    @Step("Username {username} should not be present in friend table")
+    def username_should_not_be_present(self, username: str):
+        username_cell = self.get_element().locator(f"//tbody/tr/td[2][normalize-space()='{username}']")
+        expect(username_cell).not_to_be_visible()
         return self
