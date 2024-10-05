@@ -1,33 +1,23 @@
-import base64
 import datetime
-import hashlib
-import os
-from urllib.parse import parse_qs, urlparse
+
+date_format = "%Y-%m-%dT%H:%M:%S.%f"
 
 
 class Utils:
+    @staticmethod
+    def get_current_date() -> str:
+        return datetime.datetime.utcnow().strftime(date_format) + "Z"
+
     @staticmethod
     def get_timestamp() -> int:
         return int(datetime.datetime.utcnow().timestamp())
 
     @staticmethod
-    def generate_code_verifier():
-        """Generates a high-entropy cryptographic random string for the code verifier."""
-        return base64.urlsafe_b64encode(os.urandom(32)).rstrip(b"=").decode("utf-8")
+    def get_date(offset_days: int = 0) -> str:
+        """
+        Returns the current date in format 'DD/MM/YYYY'.
 
-    @staticmethod
-    def generate_code_challenge(code_verifier):
-        """Generates the code challenge based on the code verifier."""
-        code_challenge_digest = hashlib.sha256(code_verifier.encode("utf-8")).digest()
-        return base64.urlsafe_b64encode(code_challenge_digest).rstrip(b"=").decode("utf-8")
-
-    @staticmethod
-    def generate_code():
-        token = os.urandom(32)
-        return base64.urlsafe_b64encode(token).decode("utf-8")
-
-    @staticmethod
-    def extract_code_from_url(url):
-        parsed_url = urlparse(url)
-        code = parse_qs(parsed_url.query).get("code", [None])[0]
-        return code
+        :param offset_days: number of days from current date(positive - future date, negative - past date)
+        """
+        current_date = datetime.datetime.now() + datetime.timedelta(days=offset_days)
+        return current_date.strftime("%d/%m/%Y")

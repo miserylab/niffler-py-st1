@@ -1,3 +1,5 @@
+from niffler_tests.ui.pages.component.header import Header
+from niffler_tests.ui.pages.friends_page import FriendsPage
 from niffler_tests.ui.pages.login_page import LoginPage
 from niffler_tests.ui.pages.main_page import MainPage
 from niffler_tests.ui.pages.people_page import PeoplePage
@@ -27,6 +29,8 @@ class App:
         self.registration_page = RegistrationPage(page)
         self.profile_page = ProfilePage(page)
         self.people_page = PeoplePage(page)
+        self.header = Header(page)
+        self.friends_page = FriendsPage(page)
 
     def open(self, url: str) -> None:
         self.page.goto(url)
@@ -36,3 +40,9 @@ class App:
         self.welcome_page.open(self.URL)
         self.welcome_page.click_login()
         self.login_page.fill_auth(self.username, self.password).click_login()
+
+    def _locator(self, locator: str):
+        return self.page.locator(locator)
+
+    def reload_page(self):
+        self.page.reload()

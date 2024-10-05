@@ -8,4 +8,4 @@ allure-pytest~=2.13.0
 pkce~=1.0.3
 flake8<=7.0
 isort<=5.13
-black<=23.12
+black<=24.3.0

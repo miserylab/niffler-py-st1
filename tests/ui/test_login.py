@@ -1,5 +1,6 @@
 import allure
-import pytest
+
+from marks import User
 
 
 @allure.epic("Frontend")
@@ -7,7 +8,7 @@ import pytest
 @allure.story("Аутентификация")
 @allure.tag("UI")
 class TestLoginPage:
-    @pytest.mark.usefixtures("logout")
+    @User.logout
     @allure.title("WEB: Главная страница должна отображаться после логина новым юзером")
     def test_login_success(self, app_url, app):
         app.welcome_page.open(app_url)

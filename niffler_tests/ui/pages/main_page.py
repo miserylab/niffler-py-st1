@@ -1,6 +1,8 @@
 from playwright.sync_api import Page, expect
 
 from niffler_tests.ui.pages.base_page import BasePage
+from niffler_tests.ui.pages.component.add_spending import AddSpending
+from niffler_tests.ui.pages.component.header import Header
 from niffler_tests.ui.pages.component.spending_table import SpendingTable
 from niffler_tests.utils.testing_steps import Step
 
@@ -11,6 +13,8 @@ class MainPage(BasePage):
     def __init__(self, page: Page):
         super().__init__(page)
         self.spending_table = SpendingTable(page)
+        self.spending = AddSpending(page)
+        self.header = Header(page)
         self._HEADER = page.locator("//h1")
         self._FOOTER = page.locator("//footer[@class='footer']")
 
