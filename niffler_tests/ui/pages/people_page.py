@@ -14,5 +14,5 @@ class PeoplePage(BasePage):
 
     @Step("Check that page is loaded")
     def wait_for_page_loaded(self):
-        expect(self.table.get_element()).to_be_visible()
+        expect(self.table.get_element().locator("//table//tbody//tr[1]/td[1]")).to_be_visible()
         return self

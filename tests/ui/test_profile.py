@@ -12,7 +12,7 @@ class TestProfilePage:
     @allure.title("WEB: Пользователь может отредактировать все поля в профиле")
     def test_update_user_profile_all_fields(self, app, test_data):
         data = test_data["profile_all_fields_data"]
-        app.profile_page.open()
+        app.header.to_profile_page()
         app.profile_page.wait_for_page_loaded()
         app.profile_page.set_name(data["name"])
         app.profile_page.set_surname(data["surname"])
@@ -29,7 +29,7 @@ class TestProfilePage:
     @User.generate
     @allure.title("WEB: Пользователь может отредактировать профиль с заполнением только обязательных полей")
     def test_update_user_profile_required_field_only(self, app):
-        app.profile_page.open()
+        app.header.to_profile_page()
         app.profile_page.wait_for_page_loaded()
         app.profile_page.set_currency("KZT")
         app.profile_page.submit_profile()
@@ -45,7 +45,7 @@ class TestProfilePage:
     @allure.title("WEB: Пользователь имеет возможность добавить категорию трат")
     def test_add_new_category(self, app, test_data):
         data = test_data["category_data"]
-        app.profile_page.open()
+        app.header.to_profile_page()
         app.profile_page.wait_for_page_loaded()
         app.profile_page.add_category(data["name"])
         app.profile_page.check_base_alert("New category added")
@@ -59,7 +59,7 @@ class TestProfilePage:
     def test_add_more_than_8_not_allowed(self, app, test_data):
         TEST_CATEGORIES = ["Food", "Bars", "Clothes", "Music", "Sports", "Walks", "Books", "Travel"]
         data = test_data["category_data"]
-        app.profile_page.open()
+        app.header.to_profile_page()
         app.profile_page.wait_for_page_loaded()
 
         for category in TEST_CATEGORIES:

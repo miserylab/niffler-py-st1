@@ -14,12 +14,13 @@ class TestFriendListPage:
     @Invitation.send({"username": Config.username})
     @User.logout_new_user
     @User.logout
-    def test_submit_invite(self, get_token, send_invitation, app_url, app):
+    @User.delete_user_with_friendship
+    def test_submit_invite(self, get_token, send_invitation, envs, app):
         _, username, _ = get_token
 
-        app.welcome_page.open(app_url)
+        app.welcome_page.open(envs.app_url)
         app.welcome_page.click_login()
-        app.login_page.fill_auth(Config.username, Config.password).click_login()
+        app.login_page.fill_auth(envs.username, envs.password).click_login()
         app.page.wait_for_load_state("networkidle")
         app.main_page.wait_for_page_loaded()
 
@@ -39,12 +40,13 @@ class TestFriendListPage:
     @Invitation.send({"username": Config.username})
     @User.logout_new_user
     @User.logout
-    def test_decline_invite(self, get_token, send_invitation, app_url, app):
+    @User.delete_user_wo_friendship
+    def test_decline_invite(self, get_token, send_invitation, envs, app):
         _, username, _ = get_token
 
-        app.welcome_page.open(app_url)
+        app.welcome_page.open(envs.app_url)
         app.welcome_page.click_login()
-        app.login_page.fill_auth(Config.username, Config.password).click_login()
+        app.login_page.fill_auth(envs.username, envs.password).click_login()
         app.page.wait_for_load_state("networkidle")
         app.main_page.wait_for_page_loaded()
 
@@ -64,12 +66,13 @@ class TestFriendListPage:
     @Invitation.send({"username": Config.username})
     @User.logout_new_user
     @User.logout
-    def test_remove_friend(self, get_token, send_invitation, app_url, app):
+    @User.delete_user_wo_friendship
+    def test_remove_friend(self, get_token, send_invitation, envs, app):
         _, username, _ = get_token
 
-        app.welcome_page.open(app_url)
+        app.welcome_page.open(envs.app_url)
         app.welcome_page.click_login()
-        app.login_page.fill_auth(Config.username, Config.password).click_login()
+        app.login_page.fill_auth(envs.username, envs.password).click_login()
         app.page.wait_for_load_state("networkidle")
         app.main_page.wait_for_page_loaded()
 
