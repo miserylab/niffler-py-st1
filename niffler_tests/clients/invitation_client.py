@@ -21,26 +21,35 @@ class InvitationHttpClient:
 
     def get_income_invitations(self):
         response = self.session.get(urljoin(self.base_url, "/api/invitations/income"))
-        response.raise_for_status()
+        self.raise_for_status(response)
         return response.json()
 
     def get_outcome_invitations(self):
         response = self.session.get(urljoin(self.base_url, "/api/invitations/outcome"))
-        response.raise_for_status()
+        self.raise_for_status(response)
         return response.json()
 
     def send_invitation(self, body):
         response = self.session.post(urljoin(self.base_url, "/api/invitations/send"), json=body)
-        response.raise_for_status()
+        self.raise_for_status(response)
         assert response.status_code == HTTPStatus.OK
         return response.json()
 
     def accept_invitation(self, body):
         response = self.session.post(urljoin(self.base_url, "/api/invitations/accept"), json=body)
-        response.raise_for_status()
+        self.raise_for_status(response)
         return response.json()
 
     def decline_invitation(self, body):
         response = self.session.post(urljoin(self.base_url, "/api/invitations/decline"), json=body)
-        response.raise_for_status()
+        self.raise_for_status(response)
         return response.json()
+
+    @staticmethod
+    def raise_for_status(response: requests.Response):
+        try:
+            response.raise_for_status()
+        except requests.HTTPError as e:
+            if response.status_code == 400:
+                e.add_note(response.text)
+                raise

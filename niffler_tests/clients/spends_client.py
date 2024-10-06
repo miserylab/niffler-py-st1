@@ -3,6 +3,8 @@ from urllib.parse import urljoin
 
 import requests
 
+from niffler_tests.models.spend import Category, Spend
+
 
 class SpendsHttpClient:
     session: requests.Session
@@ -19,33 +21,42 @@ class SpendsHttpClient:
             }
         )
 
-    def get_categories(self):
+    def get_categories(self) -> list[Category]:
         response = self.session.get(urljoin(self.base_url, "/api/categories/all"))
-        response.raise_for_status()
+        self.raise_for_status(response)
         assert response.status_code == HTTPStatus.OK
-        return response.json()
+        return [Category.model_validate(item) for item in response.json()]
 
-    def add_category(self, name: str):
+    def add_category(self, name: str) -> Category:
         response = self.session.post(urljoin(self.base_url, "/api/categories/add"), json={"category": name})
-        response.raise_for_status()
+        self.raise_for_status(response)
         assert response.status_code == HTTPStatus.OK
-        return response.json()
+        return Category.model_validate(response.json())
 
-    def get_spends(self):
+    def get_spends(self) -> list[Spend]:
         response = self.session.get(urljoin(self.base_url, "/api/spends/all"))
-        response.raise_for_status()
+        self.raise_for_status(response)
         assert response.status_code == HTTPStatus.OK
-        return response.json()
+        return [Spend.model_validate(item) for item in response.json()]
 
-    def add_spends(self, body):
+    def add_spends(self, spend: Spend) -> Spend:
         url = urljoin(self.base_url, "/api/spends/add")
-        response = self.session.post(url, json=body)
-        response.raise_for_status()
+        response = self.session.post(url, json=spend.model_dump())
+        self.raise_for_status(response)
         assert response.status_code == HTTPStatus.CREATED
-        return response.json()
+        return Spend.model_validate(response.json())
 
-    def remove_spends(self, ids: list[int]):
+    def remove_spends(self, ids: list[str]):
         url = urljoin(self.base_url, "/api/spends/remove")
         response = self.session.delete(url, params={"ids": ids})
-        response.raise_for_status()
+        self.raise_for_status(response)
         assert response.status_code == HTTPStatus.OK
+
+    @staticmethod
+    def raise_for_status(response: requests.Response):
+        try:
+            response.raise_for_status()
+        except requests.HTTPError as e:
+            if response.status_code == 400:
+                e.add_note(response.text)
+                raise

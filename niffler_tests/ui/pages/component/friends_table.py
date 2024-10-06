@@ -14,7 +14,6 @@ class FriendsTable(BaseComponent):
 
     @Step("Get index of {username} in Username column")
     def get_username_index(self, username: str):
-        # get list of usernames from Username column
         usernames = self.get_element().locator("//tbody/tr/td[2]").all_text_contents()
         index = usernames.index(f"{username}") + 1
         return index

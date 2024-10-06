@@ -9,3 +9,8 @@ pkce~=1.0.3
 flake8<=7.0
 isort<=5.13
 black<=24.3.0
+
+psycopg2-binary<=2.9.9
+sqlalchemy<=2.0.34
+sqlmodel~=0.0.22
+pydantic~=2.8.2

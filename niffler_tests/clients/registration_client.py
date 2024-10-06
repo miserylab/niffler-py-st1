@@ -32,5 +32,14 @@ class RegistrationHttpClient:
             },
         )
 
-        response.raise_for_status()
+        self.raise_for_status(response)
         return response.headers["X-XSRF-TOKEN"]
+
+    @staticmethod
+    def raise_for_status(response: requests.Response):
+        try:
+            response.raise_for_status()
+        except requests.HTTPError as e:
+            if response.status_code == 400:
+                e.add_note(response.text)
+                raise

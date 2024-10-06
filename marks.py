@@ -11,6 +11,9 @@ class User:
     get_token = pytest.mark.usefixtures("get_token")
     logout_new_user = pytest.mark.usefixtures("logout_user")
     logout = pytest.mark.usefixtures("ui_logout")
+    delete_user_with_friendship = pytest.mark.usefixtures("delete_user_with_friendship")
+    delete_user_wo_friendship = pytest.mark.usefixtures("delete_user_wo_friendship")
+
 
 
 class Invitation:
@@ -19,7 +22,7 @@ class Invitation:
 
 class GenerateData:
     category = lambda x: pytest.mark.parametrize("category", [x], indirect=True)
-    spends = lambda x: pytest.mark.parametrize("spends", [x], indirect=True, ids=lambda param: param["description"])
+    spends = lambda x: pytest.mark.parametrize("spends", [x], indirect=True, ids=lambda param: param.description)
 
 
 class Actions:

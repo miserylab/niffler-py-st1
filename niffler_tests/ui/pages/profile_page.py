@@ -1,7 +1,6 @@
 from playwright.sync_api import Page, expect
 
 from niffler_tests.ui.pages.base_page import BasePage
-from niffler_tests.utils.config import Config
 from niffler_tests.utils.testing_steps import Step
 
 
@@ -10,7 +9,6 @@ class ProfilePage(BasePage):
 
     def __init__(self, page: Page):
         super().__init__(page)
-        self.url = Config.app_url + "/profile"
         self._USERNAME_LABEL = page.locator("//figcaption")
         self._NAME_INPUT = page.locator("//input[@name='firstname']")
         self._SURNAME_INPUT = page.locator("//input[@name='surname']")
@@ -19,11 +17,6 @@ class ProfilePage(BasePage):
         self._SUBMIT_BUTTON = page.locator("//button[@type='submit']")
         self._CREATE_CATEGORY_BUTTON = page.locator("//button[contains(text(), 'Create')]")
         self._EXISTING_CATEGORIES_LIST = page.locator("//ul[@class='categories__list']//li")
-
-    @Step("Open profile page")
-    def open(self):
-        self.page.goto(self.url)
-        return self
 
     @Step("Check that page is loaded")
     def wait_for_page_loaded(self):

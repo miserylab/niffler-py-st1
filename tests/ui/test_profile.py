@@ -10,9 +10,10 @@ from marks import User
 class TestProfilePage:
     @User.generate
     @allure.title("WEB: Пользователь может отредактировать все поля в профиле")
-    def test_update_user_profile_all_fields(self, app, test_data):
+    def test_update_user_profile_all_fields(self, app, test_data, user_db, register_new_user_and_login):
+        user_entry_before_update = register_new_user_and_login
         data = test_data["profile_all_fields_data"]
-        app.profile_page.open()
+        app.header.to_profile_page()
         app.profile_page.wait_for_page_loaded()
         app.profile_page.set_name(data["name"])
         app.profile_page.set_surname(data["surname"])
@@ -20,32 +21,41 @@ class TestProfilePage:
         app.profile_page.submit_profile()
         app.profile_page.check_base_alert("Profile successfully updated")
 
-        app.reload_page()
-
         app.profile_page.check_name(data["name"])
         app.profile_page.check_surname(data["surname"])
         app.profile_page.check_currency(data["currency"])
 
+        user_entry = user_db.get_user_by_id(user_entry_before_update.id)
+        assert user_entry
+        assert user_entry.firstname == data["name"]
+        assert user_entry.surname == data["surname"]
+        assert user_entry.currency == data["currency"]
+
     @User.generate
     @allure.title("WEB: Пользователь может отредактировать профиль с заполнением только обязательных полей")
-    def test_update_user_profile_required_field_only(self, app):
-        app.profile_page.open()
+    def test_update_user_profile_required_field_only(self, app, user_db, register_new_user_and_login):
+        user_entry_before_update = register_new_user_and_login
+        app.header.to_profile_page()
         app.profile_page.wait_for_page_loaded()
         app.profile_page.set_currency("KZT")
         app.profile_page.submit_profile()
         app.profile_page.check_base_alert("Profile successfully updated")
 
-        app.reload_page()
-
         app.profile_page.check_name("")
         app.profile_page.check_surname("")
         app.profile_page.check_currency("KZT")
+
+        user_entry = user_db.get_user_by_username(user_entry_before_update.username)
+        assert user_entry
+        assert user_entry.firstname == ""
+        assert user_entry.surname == ""
+        assert user_entry.currency == "KZT"
 
     @User.generate
     @allure.title("WEB: Пользователь имеет возможность добавить категорию трат")
     def test_add_new_category(self, app, test_data):
         data = test_data["category_data"]
-        app.profile_page.open()
+        app.header.to_profile_page()
         app.profile_page.wait_for_page_loaded()
         app.profile_page.add_category(data["name"])
         app.profile_page.check_base_alert("New category added")
@@ -59,7 +69,7 @@ class TestProfilePage:
     def test_add_more_than_8_not_allowed(self, app, test_data):
         TEST_CATEGORIES = ["Food", "Bars", "Clothes", "Music", "Sports", "Walks", "Books", "Travel"]
         data = test_data["category_data"]
-        app.profile_page.open()
+        app.header.to_profile_page()
         app.profile_page.wait_for_page_loaded()
 
         for category in TEST_CATEGORIES:

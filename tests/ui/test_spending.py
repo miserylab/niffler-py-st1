@@ -1,6 +1,7 @@
 import allure
 
-from marks import Actions, GenerateData, Pages, User
+from marks import GenerateData, Pages, User
+from niffler_tests.models.spend import SpendAdd
 from niffler_tests.utils.utils import Utils
 
 
@@ -11,7 +12,6 @@ from niffler_tests.utils.utils import Utils
 class TestSpendingPage:
     @allure.title("WEB: Пользователь имеет возможность добавить трату")
     @GenerateData.category("Friends")
-    @Actions.delete_all_spendings
     def test_add_spending(self, app, category):
         app.reload_page()
 
@@ -64,7 +64,6 @@ class TestSpendingPage:
 
         app.main_page.spending.check_error("Amount is required")
 
-    @User.logout
     @allure.title("WEB: Пользователь имеет возможность отредактировать трату")
     def test_edit_spending(self):
         pass
@@ -78,20 +77,20 @@ class TestSpendingPage:
     @allure.title("WEB: Пользователь имеет возможность удалить трату")
     @GenerateData.category(TEST_CATEGORY)
     @GenerateData.spends(
-        {
-            "amount": "108.51",
-            "description": "QA.GURU Python Advanced 1",
-            "category": TEST_CATEGORY,
-            "spendDate": f"{Utils.get_current_date()}",
-            "currency": "RUB",
-        }
+        SpendAdd(
+            amount=108.51,
+            description="QA.GURU Python Advanced 1",
+            category=TEST_CATEGORY,
+            spendDate=f"{Utils.get_current_date()}",
+            currency="RUB",
+        )
     )
     def test_spending_should_be_deleted_after_table_action(self, category, spends, app):
         app.reload_page()
 
         app.main_page.spending_table.should_contain_value("QA.GURU Python Advanced 1")
 
-        app.main_page.spending_table.select_entry_checkbox(spends["id"])
+        app.main_page.spending_table.select_entry_checkbox(spends.id)
 
         app.main_page.spending_table.delete_selected()
 
