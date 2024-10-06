@@ -33,7 +33,7 @@ def envs() -> Envs:
 
 @pytest.fixture
 def browser(playwright: Playwright):
-    browser = playwright.chromium.launch(headless=False)
+    browser = playwright.chromium.launch(headless=True)
     yield browser
     browser.close()
 
@@ -139,6 +139,11 @@ def category(request, spends_client, spend_db) -> str:
     category_name = request.param
     category = spends_client.add_category(category_name)
     yield category.category
+    all_spends = spends_client.get_spends()
+    spends_in_category = [test_spend for test_spend in all_spends if test_spend.category == category.category]
+    if spends_in_category:
+        spend_ids = [test_spend.id for test_spend in spends_in_category]
+        spends_client.remove_spends(spend_ids)
     spend_db.delete_category(category.id)
 
 

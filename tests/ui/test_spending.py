@@ -1,6 +1,6 @@
 import allure
 
-from marks import Actions, GenerateData, Pages, User
+from marks import GenerateData, Pages, User
 from niffler_tests.models.spend import SpendAdd
 from niffler_tests.utils.utils import Utils
 
@@ -12,7 +12,6 @@ from niffler_tests.utils.utils import Utils
 class TestSpendingPage:
     @allure.title("WEB: Пользователь имеет возможность добавить трату")
     @GenerateData.category("Friends")
-    @Actions.delete_all_spendings
     def test_add_spending(self, app, category):
         app.reload_page()
 
@@ -65,7 +64,6 @@ class TestSpendingPage:
 
         app.main_page.spending.check_error("Amount is required")
 
-    @User.logout
     @allure.title("WEB: Пользователь имеет возможность отредактировать трату")
     def test_edit_spending(self):
         pass
