@@ -22,6 +22,11 @@ class UserDb:
             statement = select(User).where(User.username == username)
             return session.exec(statement).one()
 
+    def get_user_by_id(self, user_id: str) -> User:
+        with Session(self.engine) as session:
+            statement = select(User).where(User.id == user_id)
+            return session.exec(statement).one()
+
     def delete_user_by_id(self, user_id: str) -> None:
         with Session(self.engine) as session:
             user = session.get(User, user_id)
