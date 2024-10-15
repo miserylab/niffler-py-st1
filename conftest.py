@@ -3,9 +3,13 @@ import os
 
 import allure
 import pytest
+from allure_commons.reporter import AllureReporter
+from allure_commons.types import AttachmentType
+from allure_pytest.listener import AllureListener
 from dotenv import load_dotenv
 from faker import Faker
 from playwright.sync_api import Browser, Page, Playwright, expect
+from pytest import FixtureDef, FixtureRequest, Item
 
 from niffler_tests.clients.invitation_client import InvitationHttpClient
 from niffler_tests.clients.registration_client import RegistrationHttpClient
@@ -17,10 +21,30 @@ from niffler_tests.models.config import Envs
 faker = Faker("pt_BR")
 
 
+def allure_logger(config) -> AllureReporter:
+    listener: AllureListener = config.pluginmanager.get_plugin("allure_listener")
+    return listener.allure_logger
+
+
+@pytest.hookimpl(hookwrapper=True, trylast=True)
+def pytest_runtest_call(item: Item):
+    yield
+    allure.dynamic.title(" ".join(item.name.split("_")[1:]).title())
+
+
+@pytest.hookimpl(hookwrapper=True, trylast=True)
+def pytest_fixture_setup(fixturedef: FixtureDef, request: FixtureRequest):
+    yield
+    logger = allure_logger(request.config)
+    item = logger.get_last_item()
+    scope_letter = fixturedef.scope[0].upper()
+    item.name = f"[{scope_letter}] " + " ".join(fixturedef.argname.split("_")).title()
+
+
 @pytest.fixture(scope="session")
 def envs() -> Envs:
     load_dotenv()
-    return Envs(
+    envs_instance = Envs(
         app_url=os.getenv("APP_URL"),
         gateway_url=os.getenv("GATEWAY_URL"),
         auth_url=os.getenv("AUTH_URL"),
@@ -29,6 +53,9 @@ def envs() -> Envs:
         username=os.getenv("AUTH_USERNAME"),
         password=os.getenv("AUTH_PASSWORD"),
     )
+    # пример аттача енва с занятия(использовать не рекомендуется)
+    # allure.attach(envs_instance.model_dump_json(indent=2), name="envs.json", attachment_type=AttachmentType.JSON)
+    return envs_instance
 
 
 @pytest.fixture
@@ -58,6 +85,7 @@ def auth(envs, page):
     id_token = page.evaluate('window.sessionStorage.getItem("id_token")')
     assert id_token
     logging.info("Finished auth")
+    allure.attach(id_token, name="token.txt", attachment_type=AttachmentType.TEXT)
     return id_token
 
 

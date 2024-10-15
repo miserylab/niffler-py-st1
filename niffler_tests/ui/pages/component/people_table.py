@@ -15,21 +15,20 @@ class PeopleTable(BaseComponent):
         self._SUBMIT_INVITATION_BUTTON = self.get_element().locator("//div[@data-tooltip-id='submit-invitation']")
         self._DECLINE_INVITATION_BUTTON = self.get_element().locator("//div[@data-tooltip-id='decline-invitation']")
 
-    @Step("Get index of {username} in Username column")
     def get_username_index(self, username: str):
-        # get list of usernames from Username column
-        usernames = self.get_element().locator("//tbody/tr/td[2]").all_text_contents()
-        index = usernames.index(f"{username}") + 1
-        return index
+        with Step(f"Get index of {username} in Username column"):
+            usernames = self.get_element().locator("//tbody/tr/td[2]").all_text_contents()
+            index = usernames.index(f"{username}") + 1
+            return index
 
-    @Step("Add friend {username} on people table")
     def add_friend(self, username: str):
-        index = self.get_username_index(username)
-        add_button = (
-            self.get_element().locator(f"//tbody/tr[{index}]/td[4]").locator("//div[@data-tooltip-id='add-friend']")
-        )
-        add_button.click()
-        return self
+        with Step(f"Add friend {username} on people table"):
+            index = self.get_username_index(username)
+            add_button = (
+                self.get_element().locator(f"//tbody/tr[{index}]/td[4]").locator("//div[@data-tooltip-id='add-friend']")
+            )
+            add_button.click()
+            return self
 
     @Step("Check add button state on people table")
     def check_add_button(self, username: str, text: str):
@@ -48,27 +47,27 @@ class PeopleTable(BaseComponent):
         expect(decline_button).to_be_visible()
         return self
 
-    @Step("Submit invite of {username} in people table")
     def submit_invite(self, username: str):
-        index = self.get_username_index(username)
-        submit_button = (
-            self.get_element()
-            .locator(f"//tbody/tr[{index}]/td[4]")
-            .locator("//div[@data-tooltip-id='submit-invitation']")
-        )
-        submit_button.click()
-        return self
+        with Step(f"Submit invite of {username} in people table"):
+            index = self.get_username_index(username)
+            submit_button = (
+                self.get_element()
+                .locator(f"//tbody/tr[{index}]/td[4]")
+                .locator("//div[@data-tooltip-id='submit-invitation']")
+            )
+            submit_button.click()
+            return self
 
-    @Step("Decline invite of {username} in people table")
     def decline_invite(self, username: str):
-        index = self.get_username_index(username)
-        decline_button = (
-            self.get_element()
-            .locator(f"//tbody/tr[{index}]/td[4]")
-            .locator("//div[@data-tooltip-id='decline-invitation']")
-        )
-        decline_button.click()
-        return self
+        with Step(f"Decline invite of {username} in people table"):
+            index = self.get_username_index(username)
+            decline_button = (
+                self.get_element()
+                .locator(f"//tbody/tr[{index}]/td[4]")
+                .locator("//div[@data-tooltip-id='decline-invitation']")
+            )
+            decline_button.click()
+            return self
 
     @Step("Check actions after friend submitted in people table")
     def check_actions_after_friend_submitted(self, username: str, text: str):
@@ -87,14 +86,16 @@ class PeopleTable(BaseComponent):
         expect(add_button).to_be_visible()
         return self
 
-    @Step("Remove friend with username={username} in people table")
     def remove_friend(self, username: str):
-        index = self.get_username_index(username)
-        decline_button = (
-            self.get_element().locator(f"//tbody/tr[{index}]/td[4]").locator("//div[@data-tooltip-id='remove-friend']")
-        )
-        decline_button.click()
-        return self
+        with Step(f"Remove friend with username={username} in people table"):
+            index = self.get_username_index(username)
+            decline_button = (
+                self.get_element()
+                .locator(f"//tbody/tr[{index}]/td[4]")
+                .locator("//div[@data-tooltip-id='remove-friend']")
+            )
+            decline_button.click()
+            return self
 
     @Step("Check actions after friend removed in people table")
     def check_actions_after_friend_removed(self, username: str):

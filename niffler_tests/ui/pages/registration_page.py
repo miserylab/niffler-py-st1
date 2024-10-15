@@ -51,4 +51,5 @@ class RegistrationPage(BasePage):
 
     @Step("Check error message")
     def check_error_message(self, error_message: str):
-        expect(self._ERROR_MESSAGE).to_have_text(error_message)
+        with Step(f"Error message: {error_message}"):
+            expect(self._ERROR_MESSAGE).to_have_text(error_message)

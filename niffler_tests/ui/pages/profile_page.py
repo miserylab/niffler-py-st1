@@ -23,55 +23,55 @@ class ProfilePage(BasePage):
         expect(self._USERNAME_LABEL).to_be_visible()
         return self
 
-    @Step("Set name: {name}")
     def set_name(self, name: str):
-        self._NAME_INPUT.click()
-        self._NAME_INPUT.fill(name)
-        return self
+        with Step(f"Set name: {name}"):
+            self._NAME_INPUT.click()
+            self._NAME_INPUT.fill(name)
+            return self
 
-    @Step("Set surname: {surname}")
     def set_surname(self, surname: str):
-        self._SURNAME_INPUT.click()
-        self._SURNAME_INPUT.fill(surname)
-        return self
+        with Step(f"Set surname: {surname}"):
+            self._SURNAME_INPUT.click()
+            self._SURNAME_INPUT.fill(surname)
+            return self
 
-    @Step("Set currency: {currency}")
     def set_currency(self, currency: str):
-        self._CURRENCY_SELECT.click()
-        self.page.locator(f"//div[contains(@id,'react-select') and text()='{currency}']").click()
-        return self
+        with Step(f"Set currency: {currency}"):
+            self._CURRENCY_SELECT.click()
+            self.page.locator(f"//div[contains(@id,'react-select') and text()='{currency}']").click()
+            return self
 
-    @Step("Set category: {category}")
     def add_category(self, category: str):
-        self._CATEGORY_INPUT.fill(category)
-        self._CREATE_CATEGORY_BUTTON.click()
-        return self
+        with Step(f"Set category: {category}"):
+            self._CATEGORY_INPUT.fill(category)
+            self._CREATE_CATEGORY_BUTTON.click()
+            return self
 
     @Step("Check category exists")
     def check_category_exists(self, category: str):
         expect(self._EXISTING_CATEGORIES_LIST.filter(has_text=category)).to_be_visible()
         return self
 
-    @Step("Check username: {username}")
     def check_username(self, username: str):
-        expect(self._USERNAME_LABEL).to_have_text(username)
-        return self
+        with Step(f"Check username: {username}"):
+            expect(self._USERNAME_LABEL).to_have_text(username)
+            return self
 
-    @Step("Check surname: {name}")
     def check_name(self, name: str):
-        expect(self._NAME_INPUT).to_have_value(name)
-        return self
+        with Step(f"Check surname: {name}"):
+            expect(self._NAME_INPUT).to_have_value(name)
+            return self
 
-    @Step("Check surname: {surname}")
     def check_surname(self, surname: str):
-        expect(self._SURNAME_INPUT).to_have_value(surname)
-        self.page.wait_for_timeout(5000)
-        return self
+        with Step(f"Check surname: {surname}"):
+            expect(self._SURNAME_INPUT).to_have_value(surname)
+            # self.page.wait_for_timeout(5000)
+            return self
 
-    @Step("Check currency: {currency}")
     def check_currency(self, currency: str):
-        expect(self._CURRENCY_SELECT).to_have_text(currency)
-        return self
+        with Step(f"Check currency: {currency}"):
+            expect(self._CURRENCY_SELECT).to_have_text(currency)
+            return self
 
     @Step("Save profile")
     def submit_profile(self):

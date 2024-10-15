@@ -19,21 +19,21 @@ class SpendingTable(BaseComponent):
         expect(self._HEADER).to_be_visible()
         return self._HEADER
 
-    @Step("Title should have text {expected_text}")
     def title_should_have_text(self, expected_text):
         expect(self._HEADER).to_be_visible()
-        expect(self._HEADER).to_have_text(expected_text)
+        with Step(f"Title should have text {expected_text}"):
+            expect(self._HEADER).to_have_text(expected_text)
 
-    @Step("Table should contain value {value}")
     def should_contain_value(self, value):
-        expect(self._TABLE.locator("//tbody")).to_contain_text(value)
+        with Step(f"Table should contain value {value}"):
+            expect(self._TABLE.locator("//tbody")).to_contain_text(value)
 
-    @Step("Select entry checkbox by id={spend_id}")
     def select_entry_checkbox(self, spend_id):
-        entry = self.get_element().locator(f"//tbody//input[@type='checkbox'][@value='{spend_id}']")
-        entry.scroll_into_view_if_needed()
-        expect(entry).to_be_visible()
-        entry.click()
+        with Step(f"Select entry checkbox by id={spend_id}"):
+            entry = self.get_element().locator(f"//tbody//input[@type='checkbox'][@value='{spend_id}']")
+            entry.scroll_into_view_if_needed()
+            expect(entry).to_be_visible()
+            entry.click()
 
     @Step("Get table entries")
     def get_entries(self):

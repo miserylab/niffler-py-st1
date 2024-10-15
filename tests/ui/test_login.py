@@ -8,6 +8,7 @@ from marks import User
 @allure.story("Аутентификация")
 @allure.tag("UI")
 class TestLoginPage:
+
     @User.logout
     @allure.title("WEB: Главная страница должна отображаться после логина новым юзером")
     def test_login_success(self, envs, app):

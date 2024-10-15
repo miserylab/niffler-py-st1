@@ -9,12 +9,13 @@ from niffler_tests.utils.config import Config
 @allure.story("Добавление в друзья")
 @allure.tag("UI")
 class TestFriendListPage:
-    @allure.title("WEB: Пользователь может принять запрос в друзья на странице друзей")
+
     @User.get_token
     @Invitation.send({"username": Config.username})
     @User.logout_new_user
     @User.logout
     @User.delete_user_with_friendship
+    @allure.title("WEB: Пользователь может принять запрос в друзья на странице друзей")
     def test_submit_invite(self, get_token, send_invitation, envs, app):
         _, username, _ = get_token
 
@@ -35,12 +36,12 @@ class TestFriendListPage:
 
         app.friends_page.table.check_actions_after_friend_submitted(username, "You are friends")
 
-    @allure.title("WEB: Пользователь может отклонить запрос в друзья на странице друзей")
     @User.get_token
     @Invitation.send({"username": Config.username})
     @User.logout_new_user
     @User.logout
     @User.delete_user_wo_friendship
+    @allure.title("WEB: Пользователь может отклонить запрос в друзья на странице друзей")
     def test_decline_invite(self, get_token, send_invitation, envs, app):
         _, username, _ = get_token
 
@@ -61,12 +62,12 @@ class TestFriendListPage:
 
         app.friends_page.table.username_should_not_be_present(username)
 
-    @allure.title("WEB: Пользователь может удалить друга на странице друзей")
     @User.get_token
     @Invitation.send({"username": Config.username})
     @User.logout_new_user
     @User.logout
     @User.delete_user_wo_friendship
+    @allure.title("WEB: Пользователь может удалить друга на странице друзей")
     def test_remove_friend(self, get_token, send_invitation, envs, app):
         _, username, _ = get_token
 
