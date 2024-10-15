@@ -19,38 +19,39 @@ class AddSpending(BaseComponent):
         self._ADD_SPENDING_BUTTON = self.get_element().locator("//button[@type='submit']")
         self._ERROR_TEXT = self.get_element().locator("//span[@class='form__error']")
 
-    @Step("Set category {category}")
     def set_category(self, category: str):
         expect(self.get_element()).to_be_visible()
-        self._CATEGORY_SELECT.click()
-        self.get_element().locator(f"//div[@role='option'][text() = '{category}']").click()
-        return self
+        with Step(f"Set category {category}"):
+            self._CATEGORY_SELECT.click()
+            self.get_element().locator(f"//div[@role='option'][text() = '{category}']").click()
+            return self
 
-    @Step("Set amount {amount}")
     def set_amount(self, amount: str):
         expect(self.get_element()).to_be_visible()
-        self._AMOUNT_INPUT.fill(amount)
-        return self
+        with Step(f"Set amount {amount}"):
+            self._AMOUNT_INPUT.fill(amount)
+            return self
 
-    @Step("Set date {date}")
     def set_date(self, date: str):
         expect(self.get_element()).to_be_visible()
-        self._SPEND_DATE_SELECT.fill(date)
-        self.page.keyboard.press("Enter")
-        return self
+        with Step(f"Set date {date}"):
+            self._SPEND_DATE_SELECT.fill(date)
+            self.page.keyboard.press("Enter")
+            return self
 
-    @Step("Set description {description}")
     def set_description(self, description: str):
         expect(self.get_element()).to_be_visible()
-        self._DESCRIPTION_INPUT.fill(description)
-        return self
+        with Step(f"Set description {description}"):
+            self._DESCRIPTION_INPUT.fill(description)
+            return self
 
-    @Step("Add spending")
+    @Step("Click button Add spending")
     def add_spending(self):
         self._ADD_SPENDING_BUTTON.click()
         return self
 
     @Step("Check error")
     def check_error(self, text: str):
-        expect(self._ERROR_TEXT).to_have_text(text)
-        return self
+        with Step(f"Error text: {text}"):
+            expect(self._ERROR_TEXT).to_have_text(text)
+            return self
